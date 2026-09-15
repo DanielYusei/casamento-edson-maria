@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#7b6670">
-<title>Edson & Maria — Nosso Casamento</title>
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://script.google.com https://script.googleusercontent.com; form-action 'none'; base-uri 'none'">
+<title>Edson &amp; Maria — Nosso Casamento</title>
 <style>
 :root{--ink:#46383d;--rose:#9a7a84;--cream:#fbf8f4;--line:#ded2d0}
 *{box-sizing:border-box} body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
@@ -18,12 +21,15 @@ h1{font-size:clamp(46px,10vw,82px);font-weight:400;line-height:.95;margin:18px 0
 .date{font:15px Arial,sans-serif;letter-spacing:2px;margin:26px 0}
 .quote{font-style:italic;font-size:19px;line-height:1.7;margin:28px auto;max-width:540px}
 .btn{display:inline-block;border:0;background:var(--rose);color:white;text-decoration:none;padding:15px 24px;margin:8px 5px;font:12px Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 section{max-width:720px;margin:auto;padding:70px 22px;text-align:center}
 h2{font-size:32px;font-weight:400}.details{font:15px Arial,sans-serif;line-height:1.9}
 .form{max-width:520px;margin:25px auto;text-align:left}.field{margin:15px 0}.field label{display:block;font:12px Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
 input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);background:white;font:15px Arial,sans-serif;color:var(--ink)}
 .choice{display:flex;gap:15px;align-items:center;font:15px Arial,sans-serif}.choice input{width:auto}
 .notice{padding:18px;border:1px solid var(--line);background:#fff;margin-top:18px;display:none;line-height:1.6}
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
 .footer{text-align:center;padding:40px 20px;font-style:italic;color:var(--rose)}
 </style>
 </head>
@@ -31,11 +37,11 @@ input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);backg
 <header class="hero">
   <div class="card">
     <div class="small">Com alegria, convidamos você</div>
-    <h1>Edson<br><span class="and">&</span> Maria</h1>
+    <h1>Edson<br><span class="and">&amp;</span> Maria</h1>
     <div class="date">19 DE SETEMBRO DE 2026 · 10H00</div>
     <p class="quote">“Duas vidas, um amor, uma nova história.”</p>
     <a class="btn" href="#confirmar">Confirmar presença</a>
-    <a class="btn" target="_blank" href="https://maps.app.goo.gl/j24yTMbVwGyCi63S6?g_st=ac">Como chegar</a>
+    <a class="btn" target="_blank" rel="noopener noreferrer" href="https://maps.app.goo.gl/j24yTMbVwGyCi63S6?g_st=ac">Como chegar</a>
   </div>
 </header>
 
@@ -52,58 +58,92 @@ input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);backg
 <section id="confirmar">
   <h2>Confirme sua presença</h2>
   <p>Para nos ajudar na organização, pedimos que confirme sua presença.</p>
-  <form class="form" id="rsvp">
-    <div class="field"><label>Seu nome</label><input id="nome" required placeholder="Digite seu nome"></div>
+  <form class="form" id="rsvp" autocomplete="off" novalidate>
+    <div class="field"><label for="nome">Seu nome</label><input id="nome" name="nome" maxlength="80" autocomplete="name" required placeholder="Digite seu nome"></div>
     <div class="field"><label>Você estará presente?</label>
       <div class="choice"><label><input type="radio" name="presenca" value="Sim" required> Sim, estarei presente</label>
       <label><input type="radio" name="presenca" value="Não"> Não poderei comparecer</label></div>
     </div>
-    <div class="field" id="acompWrap"><label>Quantidade de acompanhantes</label>
+    <div class="field" id="acompWrap"><label for="acomp">Quantidade de acompanhantes</label>
       <select id="acomp"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
     </div>
-    <div class="field"><label>Nome dos acompanhantes (se houver)</label><input id="acompNomes" placeholder="Nome dos acompanhantes"></div>
-    <div class="field"><label>Mensagem (opcional)</label><textarea id="msg" rows="3" placeholder="Deixe uma mensagem para os noivos"></textarea></div>
-    <button class="btn" type="submit">Enviar confirmação</button>
+    <div class="field"><label for="acompNomes">Nome dos acompanhantes (se houver)</label><input id="acompNomes" maxlength="300" placeholder="Nome dos acompanhantes"></div>
+    <div class="field"><label for="msg">Mensagem (opcional)</label><textarea id="msg" maxlength="500" rows="3" placeholder="Deixe uma mensagem para os noivos"></textarea></div>
+
+    <!-- Campo-armadilha: invisível para pessoas, preenchido por robôs. Não remova. -->
+    <div class="hp" aria-hidden="true"><label for="site">Site</label><input id="site" tabindex="-1" autocomplete="off"></div>
+
+    <button class="btn" type="submit" id="enviar">Enviar confirmação</button>
     <div class="notice" id="ok">❤️ Obrigado! Sua resposta foi registrada.</div>
     <div class="notice" id="err">Não foi possível enviar agora. Tente novamente em instantes.</div>
   </form>
 </section>
-<footer class="footer">Edson & Maria · 19.09.2026</footer>
+<footer class="footer">Edson &amp; Maria · 19.09.2026</footer>
 
 <script>
-// Cole aqui a URL da implantação do Google Apps Script após configurar o backend.
-// Ex.: const API_URL = "https://script.google.com/macros/s/SEU_ID/exec";
-const API_URL = "https://script.google.com/macros/s/AKfycbwjAAg8LTocFNi4Byam9zBwwUqW_EqRUSx1U6IyumFmg4TWPL9IqQ8JzlzpwIMW-q_4/exec";
+// URL da implantação do Apps Script (/exec).
+const API_URL = "https://script.google.com/macros/s/AKfycbyks-dVaHVys82KW_EKRnQVehZOe6HrWKuzVj1VS2R2HRWeIcQPLFsY9gEGUuT3aO7W/exec";
+
+// Precisa ser idêntica à constante CHAVE_APP do Code.gs.
+const CHAVE_APP = "eea137f9f03e6b3d4150adddb528b7fd";
+
+const CARREGADO_EM = Date.now();
+const $ = id => document.getElementById(id);
 
 document.querySelectorAll('input[name="presenca"]').forEach(r => r.addEventListener('change', () => {
   const sim = document.querySelector('input[name="presenca"]:checked')?.value === 'Sim';
-  document.getElementById('acompWrap').style.display = sim ? 'block' : 'none';
-  if(!sim){document.getElementById('acomp').value='0';document.getElementById('acompNomes').value='';}
+  $('acompWrap').style.display = sim ? 'block' : 'none';
+  if(!sim){ $('acomp').value = '0'; $('acompNomes').value = ''; }
 }));
+
+function mostrar(idVisivel, idOculto, texto){
+  if(texto) $(idVisivel).textContent = texto;
+  $(idVisivel).style.display = 'block';
+  $(idOculto).style.display = 'none';
+}
 
 document.getElementById('rsvp').addEventListener('submit', async e => {
   e.preventDefault();
+
+  const nome = $('nome').value.trim();
+  const presenca = document.querySelector('input[name="presenca"]:checked')?.value;
+  if(nome.length < 2)  return mostrar('err','ok','Informe seu nome para confirmar.');
+  if(!presenca)        return mostrar('err','ok','Escolha se você poderá comparecer.');
+
   const data = {
-    nome: document.getElementById('nome').value.trim(),
-    presenca: document.querySelector('input[name="presenca"]:checked')?.value,
-    acompanhantes: document.getElementById('acomp').value,
-    nomesAcompanhantes: document.getElementById('acompNomes').value.trim(),
-    mensagem: document.getElementById('msg').value.trim()
+    chave: CHAVE_APP,
+    tempo: Date.now() - CARREGADO_EM,
+    site: $('site').value,
+    nome: nome,
+    presenca: presenca,
+    acompanhantes: presenca === 'Sim' ? $('acomp').value : '0',
+    nomesAcompanhantes: presenca === 'Sim' ? $('acompNomes').value.trim() : '',
+    mensagem: $('msg').value.trim()
   };
-  if(!API_URL){
-    localStorage.setItem('rsvp_'+Date.now(), JSON.stringify(data));
-    document.getElementById('ok').style.display='block';
-    document.getElementById('err').style.display='none';
-    return;
-  }
+
+  const botao = $('enviar');
+  botao.disabled = true;
+  const controle = new AbortController();
+  const expirar = setTimeout(() => controle.abort(), 12000);
+
   try{
-    await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
-    document.getElementById('ok').style.display='block';
-    document.getElementById('err').style.display='none';
+    const resposta = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(data),
+      signal: controle.signal,
+      redirect: 'follow'
+    });
+    const r = await resposta.json();
+    if(!r.ok) throw new Error(r.erro || 'falha');
+    mostrar('ok','err','❤️ Obrigado! Sua resposta foi registrada.');
     e.target.reset();
-  }catch(err){
-    document.getElementById('err').style.display='block';
-    document.getElementById('ok').style.display='none';
+    $('acompWrap').style.display = 'block';
+  }catch(erro){
+    mostrar('err','ok','Não foi possível enviar agora. Tente novamente em instantes.');
+  }finally{
+    clearTimeout(expirar);
+    botao.disabled = false;
   }
 });
 </script>

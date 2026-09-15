@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#7b6670">
+<title>Edson & Maria — Nosso Casamento</title>
+<style>
+:root{--ink:#46383d;--rose:#9a7a84;--cream:#fbf8f4;--line:#ded2d0}
+*{box-sizing:border-box} body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:40px 22px;background:
+radial-gradient(circle at 15% 20%,#eadcdf 0 2px,transparent 3px),
+radial-gradient(circle at 85% 75%,#eadcdf 0 2px,transparent 3px),var(--cream)}
+.card{max-width:720px;width:100%;padding:55px 28px;border:1px solid var(--line);background:rgba(255,255,255,.55);box-shadow:0 15px 50px #5a45450f}
+.small{letter-spacing:4px;text-transform:uppercase;font:12px Arial,sans-serif;color:var(--rose)}
+h1{font-size:clamp(46px,10vw,82px);font-weight:400;line-height:.95;margin:18px 0 8px}
+.and{font-size:24px;color:var(--rose);font-style:italic;margin:8px}
+.date{font:15px Arial,sans-serif;letter-spacing:2px;margin:26px 0}
+.quote{font-style:italic;font-size:19px;line-height:1.7;margin:28px auto;max-width:540px}
+.btn{display:inline-block;border:0;background:var(--rose);color:white;text-decoration:none;padding:15px 24px;margin:8px 5px;font:12px Arial,sans-serif;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+section{max-width:720px;margin:auto;padding:70px 22px;text-align:center}
+h2{font-size:32px;font-weight:400}.details{font:15px Arial,sans-serif;line-height:1.9}
+.form{max-width:520px;margin:25px auto;text-align:left}.field{margin:15px 0}.field label{display:block;font:12px Arial,sans-serif;text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+input,select,textarea{width:100%;padding:13px;border:1px solid var(--line);background:white;font:15px Arial,sans-serif;color:var(--ink)}
+.choice{display:flex;gap:15px;align-items:center;font:15px Arial,sans-serif}.choice input{width:auto}
+.notice{padding:18px;border:1px solid var(--line);background:#fff;margin-top:18px;display:none;line-height:1.6}
+.footer{text-align:center;padding:40px 20px;font-style:italic;color:var(--rose)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="card">
+    <div class="small">Com alegria, convidamos você</div>
+    <h1>Edson<br><span class="and">&</span> Maria</h1>
+    <div class="date">19 DE SETEMBRO DE 2026 · 10H00</div>
+    <p class="quote">“Duas vidas, um amor, uma nova história.”</p>
+    <a class="btn" href="#confirmar">Confirmar presença</a>
+    <a class="btn" target="_blank" href="https://maps.app.goo.gl/j24yTMbVwGyCi63S6?g_st=ac">Como chegar</a>
+  </div>
+</header>
+
+<section>
+  <h2>Nosso casamento</h2>
+  <div class="details">
+    <strong>19 de setembro de 2026 · 10h00</strong><br><br>
+    4º RCPN e Tabelionato de Notas<br>
+    Av. Tocantins, 283 – Setor Central<br>
+    Goiânia – GO
+  </div>
+</section>
+
+<section id="confirmar">
+  <h2>Confirme sua presença</h2>
+  <p>Para nos ajudar na organização, pedimos que confirme sua presença.</p>
+  <form class="form" id="rsvp">
+    <div class="field"><label>Seu nome</label><input id="nome" required placeholder="Digite seu nome"></div>
+    <div class="field"><label>Você estará presente?</label>
+      <div class="choice"><label><input type="radio" name="presenca" value="Sim" required> Sim, estarei presente</label>
+      <label><input type="radio" name="presenca" value="Não"> Não poderei comparecer</label></div>
+    </div>
+    <div class="field" id="acompWrap"><label>Quantidade de acompanhantes</label>
+      <select id="acomp"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+    </div>
+    <div class="field"><label>Nome dos acompanhantes (se houver)</label><input id="acompNomes" placeholder="Nome dos acompanhantes"></div>
+    <div class="field"><label>Mensagem (opcional)</label><textarea id="msg" rows="3" placeholder="Deixe uma mensagem para os noivos"></textarea></div>
+    <button class="btn" type="submit">Enviar confirmação</button>
+    <div class="notice" id="ok">❤️ Obrigado! Sua resposta foi registrada.</div>
+    <div class="notice" id="err">Não foi possível enviar agora. Tente novamente em instantes.</div>
+  </form>
+</section>
+<footer class="footer">Edson & Maria · 19.09.2026</footer>
+
+<script>
+// Cole aqui a URL da implantação do Google Apps Script após configurar o backend.
+// Ex.: const API_URL = "https://script.google.com/macros/s/SEU_ID/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwjAAg8LTocFNi4Byam9zBwwUqW_EqRUSx1U6IyumFmg4TWPL9IqQ8JzlzpwIMW-q_4/exec";
+
+document.querySelectorAll('input[name="presenca"]').forEach(r => r.addEventListener('change', () => {
+  const sim = document.querySelector('input[name="presenca"]:checked')?.value === 'Sim';
+  document.getElementById('acompWrap').style.display = sim ? 'block' : 'none';
+  if(!sim){document.getElementById('acomp').value='0';document.getElementById('acompNomes').value='';}
+}));
+
+document.getElementById('rsvp').addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = {
+    nome: document.getElementById('nome').value.trim(),
+    presenca: document.querySelector('input[name="presenca"]:checked')?.value,
+    acompanhantes: document.getElementById('acomp').value,
+    nomesAcompanhantes: document.getElementById('acompNomes').value.trim(),
+    mensagem: document.getElementById('msg').value.trim()
+  };
+  if(!API_URL){
+    localStorage.setItem('rsvp_'+Date.now(), JSON.stringify(data));
+    document.getElementById('ok').style.display='block';
+    document.getElementById('err').style.display='none';
+    return;
+  }
+  try{
+    await fetch(API_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)});
+    document.getElementById('ok').style.display='block';
+    document.getElementById('err').style.display='none';
+    e.target.reset();
+  }catch(err){
+    document.getElementById('err').style.display='block';
+    document.getElementById('ok').style.display='none';
+  }
+});
+</script>
+</body>
+</html>
